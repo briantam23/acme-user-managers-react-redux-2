@@ -4,6 +4,7 @@ import { HashRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { addUsers } from './store';
 import Users from './Users';
 import UserCreate from './UserCreate';
+import UserEdit from './UserEdit';
 
 class Nav extends Component {
     componentDidMount() {
@@ -22,8 +23,9 @@ class Nav extends Component {
                         <li><Link to='/users/create'>Users Create</Link></li>
                     </ul>
                     <Switch>
-                        <Route path='/users' render={ () => <Users /> }/>
-                        <Route path='/users/create' render={ () => <UserCreate /> }/>
+                        <Route path='/users/create' render={ ({ history }) => <UserCreate  history={ history }/> }/>
+                        <Route exact path='/users' render={ () => <Users /> }/>
+                        <Route path='/users/:id' render={ () => <UserEdit /> } />
                     </Switch>
                 </div>
             </Router>
