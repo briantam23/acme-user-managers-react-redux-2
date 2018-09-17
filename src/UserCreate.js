@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+/* import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addUser } from './store';
 
@@ -60,4 +60,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     addUser: user => dispatch(addUser(user, ownProps.history))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCreate); */

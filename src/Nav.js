@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import { HashRouter as Router, Link, Route, Switch } from 'react-router-dom';
 import { addUsers } from './store';
 import Users from './Users';
-import UserCreate from './UserCreate';
-import UserEdit from './UserEdit';
 import Managers from './Managers';
+import UserCreateUpdate from './UserCreateUpdate';
 
 class Nav extends Component {
     componentDidMount() {
@@ -35,9 +34,10 @@ class Nav extends Component {
                         <li><Link to='/users/create'>Users Create</Link></li>
                     </ul>
                     <Switch>
-                        <Route path='/users/create' render={ ({ history }) => <UserCreate  history={ history }/> }/>
+                        {/* <Route path='/users/create' render={ ({ history }) => <UserCreate  history={ history }/> }/>
+                        <Route path='/users/:id' render={ ({ history, match }) => <UserUpdate history={ history } match={ match } _managers={ _managers() }/> } /> */}
+                        <Route path={ '/users/:id' || '/users/create' } render={ ({ history, match }) => <UserCreateUpdate history={ history } match={ match } _managers={ _managers() }/> } />
                         <Route exact path='/users' render={ () => <Users _managers={ _managers() }/> }/>
-                        <Route path='/users/:id' render={ ({ history, match }) => <UserEdit history={ history } match={ match } _managers={ _managers() }/> } />
                         <Route path='/managers' render={ () => <Managers managers={ managers }/> } />
                     </Switch>
                 </div>

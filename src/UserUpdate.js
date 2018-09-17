@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+/* import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { editUser, fetchUser } from './store';
 
-class UserEdit extends Component {
+class UserUpdate extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,4 +74,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     fetchUser: id => dispatch(fetchUser(id))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(UserUpdate); */
