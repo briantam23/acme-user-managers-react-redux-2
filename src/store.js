@@ -6,6 +6,8 @@ import axios from 'axios';
 const ADD_USERS = 'ADD_USERS';
 const ADD_USER = 'ADD_USER';
 const DESTROY_USER = 'DESTROY_USER';
+const EDIT_USER = 'EDIT_USER';
+const FETCH_USER = 'FETCH_USER';
 
 const _addUsers = users => ({
     type: ADD_USERS,
@@ -42,6 +44,31 @@ export const destroyUser = user => (
             .then(() => dispatch(_destroyUser(user)))
     }
 )
+const _editUser = user => ({
+    type: EDIT_USER,
+    users: user
+})
+export const editUser = (user, id, history) => (
+    dispatch => {
+        axios.put(`/api/users/${id}`, user)
+            .then(res => res.data)
+            .then(user => {
+                dispatch(_editUser(user));
+                history.push('/users');
+            })
+    }
+)
+const _fetchUser = user => ({
+    type: FETCH_USER,
+    user
+})
+export const fetchUser = id => (
+    dispatch => {
+        axios.get(`/api/users/${id}`)
+            .then(res => res.data)
+            .then(user => dispatch(_fetchUser(user)))
+    }
+)
 
 const usersReducer = (state = [], action) => {
     switch(action.type) {
@@ -51,13 +78,24 @@ const usersReducer = (state = [], action) => {
             return [...state, action.users];
         case DESTROY_USER:
             return state.filter(user => user.id !== action.users.id);
+        case EDIT_USER:
+            return state.map(user => user.id !== action.users.id ? user : action.users);
+        default:
+            return state;
+    }
+}
+const userReducer = (state = {}, action) => {
+    switch(action.type) {
+        case FETCH_USER:
+            return action.user;
         default:
             return state;
     }
 }
 
 const reducer = combineReducers({
-    users: usersReducer
+    users: usersReducer,
+    user: userReducer
 })
 
 const store = createStore(reducer, applyMiddleware(logger, thunk));

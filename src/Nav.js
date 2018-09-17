@@ -5,6 +5,7 @@ import { addUsers } from './store';
 import Users from './Users';
 import UserCreate from './UserCreate';
 import UserEdit from './UserEdit';
+import Managers from './Managers';
 
 class Nav extends Component {
     componentDidMount() {
@@ -12,20 +13,32 @@ class Nav extends Component {
     }
     render() {
         const { users } = this.props;
-        const duplicateManagers = users.filter(user => user.managerId !== null);
+        const _managers = () => {
+            let managersArr = [];
+            for(let i=0; i < users.length; i++) {
+                for(let j=0; j < users.length; j++) {
+                    if(users[i].managerId === users[j].id) {
+                        managersArr[users[i].managerId] = users[j].name;
+                    }
+                }
+            }
+            return managersArr;
+        }
+        const managers = _managers().filter(user => user.ManagerId !== null)
         return (
             <Router>
                 <div>
                     <h1>Acme Users with Managers 2</h1>
                     <ul>
                         <li><Link to='/users'>Users ({ users.length })</Link></li>
-                        <li><Link to='/managers'>Managers (X)</Link></li>
+                        <li><Link to='/managers'>Managers ({ managers.length })</Link></li>
                         <li><Link to='/users/create'>Users Create</Link></li>
                     </ul>
                     <Switch>
                         <Route path='/users/create' render={ ({ history }) => <UserCreate  history={ history }/> }/>
-                        <Route exact path='/users' render={ () => <Users /> }/>
-                        <Route path='/users/:id' render={ () => <UserEdit /> } />
+                        <Route exact path='/users' render={ () => <Users _managers={ _managers() }/> }/>
+                        <Route path='/users/:id' render={ ({ history, match }) => <UserEdit history={ history } match={ match } _managers={ _managers() }/> } />
+                        <Route path='/managers' render={ () => <Managers managers={ managers }/> } />
                     </Switch>
                 </div>
             </Router>

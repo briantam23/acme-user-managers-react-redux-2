@@ -6,33 +6,58 @@ class UserCreate extends Component {
     constructor() {
         super();
         this.state = {
-            name: ''
+            userName: '',
+            managerName: ''
         }
-        this.handleChange = this.handleChange.bind(this);
+        this.handleUserChange = this.handleUserChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleManagerChange = this.handleManagerChange.bind(this);
     }
-    handleChange(e) {
-        this.setState({ name: e.target.value });
+    handleUserChange(e) {
+        this.setState({ userName: e.target.value });
     }
     handleSubmit(e) {
-        console.log(this.props.ownProps)
+        const { users, addUser } = this.props;
+        const { managerName, userName } = this.state;
         e.preventDefault();
-        this.props.addUser({ name: this.state.name })
+        let managerId = null;
+        for(let i = 0; i < users.length; i++) {
+            if(users[i].name === managerName) {
+                managerId = users[i].id;
+            }
+        }
+        addUser({ name: userName, managerId })
+    }
+    handleManagerChange(e) {
+        this.setState({ managerName: e.target.value });
     }
     render() {
-        const { name } = this.state;
-        const { handleChange, handleSubmit } = this;
+        const { userName, manager } = this.state;
+        const { handleUserChange, handleSubmit, handleManagerChange } = this;
+        const { users } = this.props;
         return (
             <form onSubmit={ handleSubmit }>
-                <input value={ name } onChange={ handleChange }></input>
-                <button disabled={ !name }>Create</button>
+                <input value={ userName } onChange={ handleUserChange }></input>
+                <select onChange={ handleManagerChange }>
+                <option>--None--</option>
+                {
+                    users.map(user => <option key={ user.id }>
+                        { user.name }
+                    </option>)
+                }
+                </select>
+                <button disabled={ !userName }>Create</button>
             </form>
         )
     }
 }
 
+const mapStateToProps = state => ({
+    users: state.users
+})
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
     addUser: user => dispatch(addUser(user, ownProps.history))
 })
 
-export default connect(null, mapDispatchToProps)(UserCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCreate);

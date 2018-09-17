@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { destroyUser } from './store';
 
-const Users = ({ users, destroyUser }) => {
+const Users = ({ users, destroyUser, _managers }) => {
     return (
         users.map(user => <li key={ user.id }>
             <Link to={ `/users/${ user.id }` }>
                 { user.name }
-            </Link>
+            </Link> { user.managerId && _managers[user.managerId] ? 'managed by ' + _managers[user.managerId] : null }
             <button onClick={ () => destroyUser(user) }>X</button>
         </li>)
     )
